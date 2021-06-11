@@ -1,5 +1,10 @@
-.App {
+/* .App {
   text-align: center;
+}
+
+.row{
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .App-logo {
@@ -11,7 +16,7 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .App-header {
   background-color: #282c34;
