@@ -1,11 +1,22 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Navbar';
 // import './Tasks.css';
 import { Modal } from 'react-bootstrap'
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+    PieChart, Pie, ResponsiveContainer, Cell, Legend, Tooltip
+} from 'recharts';
 
+
+const COLORS = ['#1890ff', '#808080'];
+
+const RADIAN = Math.PI / 180;
+
+let renderLabel = function(entry) {
+    return entry.name;
+}
 
 export default function Tasks() {
 
@@ -17,12 +28,22 @@ export default function Tasks() {
     const [taskText, setTaskText] = useState('');
     const [taskId, setTaskId] = useState('');
     const [taskStatus, setTaskStatus] = useState(false);
-
+    const [lastCreated, setLastCreated] = useState([]);
     const [search, setSearch] = useState('');
+    const [pieData, setPieData] = useState([]);
 
     useEffect(() => {
         fetchTasks();
     }, []);
+
+    const data01 = [
+        { name: 'Group A', value: 400 },
+        { name: 'Group B', value: 300 },
+        { name: 'Group C', value: 300 },
+        { name: 'Group D', value: 200 },
+        { name: 'Group E', value: 278 },
+        { name: 'Group F', value: 189 },
+    ];
 
     const fetchTasks = async () => {
         let res = await fetch('http://localhost:5001/tasks', {
@@ -32,6 +53,11 @@ export default function Tasks() {
         tasks.forEach(x => {
             x.state = x.status == 1 ? true : false;
         })
+        let pData = [];
+        pData.push({ name: 'Completed', value: tasks.filter(x => x.status == 1).length });
+        pData.push({ name: 'Pending', value: tasks.filter(x => x.status == 0).length });
+        console.log(pData);
+        setPieData(pData);
         setTasks(tasks);
         setTempTasks(tasks);
     }
@@ -55,7 +81,7 @@ export default function Tasks() {
         }).then(() => {
             toast.success('Task Added Successfully', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -65,7 +91,7 @@ export default function Tasks() {
         }).catch(() => {
             toast.warn('Unable to add task', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -92,7 +118,7 @@ export default function Tasks() {
         }).then(() => {
             toast.success('Task Updated Successfully', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -102,7 +128,7 @@ export default function Tasks() {
         }).catch(() => {
             toast.warn('Unable to update task', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -137,7 +163,7 @@ export default function Tasks() {
         }).then(() => {
             toast.success('Task Deleted Successfully', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -147,7 +173,7 @@ export default function Tasks() {
         }).catch(() => {
             toast.warn('Unable to delete task', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -173,7 +199,7 @@ export default function Tasks() {
         }).then(() => {
             toast.success('Task Status Updated Successfully', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -183,7 +209,7 @@ export default function Tasks() {
         }).catch(() => {
             toast.warn('Unable to update task', {
                 position: "top-right",
-                position:"bottom-right",autoClose: 5000,
+                position: "bottom-right", autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -198,6 +224,62 @@ export default function Tasks() {
     return (
         <>
             <Header />
+            <div className="row">
+                <div className="col-xl-4 col-md-4 col-12">
+                    <div style={{ height: '160px' }} className="card">
+                        <div style={{ backgroundColor: 'lightgray' }} className="card-body text-center">
+                            <p className="mt-0">Tasks Completed</p>
+                            <h1 className="mb-0">{tempTasks.filter(x => x.status == 1).length}<small>/{tempTasks.length}</small></h1>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-xl-4 col-md-4 col-12">
+                    <div style={{ height: '160px' }} className="card">
+                        <div style={{ backgroundColor: 'lightgray' }} className="card-body">
+                            <h5 className="text-center">Created Tasks: </h5>
+                            <div className="text-center">
+                                <ul className="">
+                                    {tempTasks.sort((a, b) => {
+                                        return a.id - b.id;
+                                    }).slice(0,3).map(listitem => (
+                                       listitem.status == 1 ? <li key={listitem.id}><s>{listitem.text}</s></li> :
+                                        <li key={listitem.id} className="">
+                                        {listitem.text}
+                                    </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-xl-4 col-md-4 col-12">
+                    <div style={{ height: '160px' }} className="card">
+                        <div style={{ backgroundColor: 'lightgray' }} className="card-body">
+                            <ResponsiveContainer width="99%" height="80%" minHeight={120}>
+                                <PieChart>
+                                    <Pie
+                                        dataKey="value"
+                                        isAnimationActive={false}
+                                        data={pieData}
+                                        fill="#8884d8"
+                                        label={renderLabel}
+                                        labelLine={false}
+                                    >
+                                        {pieData.map((entry, index) => (
+                                            <Cell
+                                                dataKey="name"
+                                                key={index}
+                                                fill={COLORS[index]}
+                                            />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip/>
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <>
                 {(tasks.length === 0 && search == '') ? (
                     <div className="row">
@@ -270,7 +352,7 @@ export default function Tasks() {
                     )
                 }
             </>
-            
+
             <Modal show={showAddTaskModal} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>+ New Task</Modal.Title>

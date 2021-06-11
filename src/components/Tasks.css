@@ -1,3 +1,7 @@
 .offset-md-4{
     margin-top: 15% !important;
 }
+
+.small, small {
+    font-size: 50% !important;
+}
