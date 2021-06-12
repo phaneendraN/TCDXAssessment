@@ -46,7 +46,7 @@ export default function Tasks() {
     ];
 
     const fetchTasks = async () => {
-        let res = await fetch('http://localhost:5001/tasks', {
+        let res = await fetch('http://18.188.192.149/dcxservice/tasks', {
             method: 'GET'
         });
         let tasks = await res.json();
@@ -72,7 +72,7 @@ export default function Tasks() {
             text: newTask,
             status: 1
         }
-        await fetch(`http://localhost:5001/tasks`, {
+        await fetch(`http://18.188.192.149/dcxservice/tasks`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -109,7 +109,7 @@ export default function Tasks() {
             "status": taskStatus == true ? 1 : 0,
             "id": taskId
         }
-        await fetch(`http://localhost:5001/tasks/${obj.id}`, {
+        await fetch(`http://18.188.192.149/dcxservice/tasks/${obj.id}`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json'
@@ -158,7 +158,7 @@ export default function Tasks() {
     }
 
     const onDeleteTask = async (e, t) => {
-        await fetch(`http://localhost:5001/tasks/${t.id}`, {
+        await fetch(`http://18.188.192.149/dcxservice/tasks/${t.id}`, {
             method: 'DELETE'
         }).then(() => {
             toast.success('Task Deleted Successfully', {
@@ -190,7 +190,7 @@ export default function Tasks() {
             "status": x.status == 1 ? 0 : 1
         }));
         console.log(task);
-        await fetch(`http://localhost:5001/tasks/${t.id}`, {
+        await fetch(`http://18.188.192.149/dcxservice/tasks/${t.id}`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json'
