@@ -10,14 +10,12 @@ npm install
 
 ## Run Server(used json-server)
 
-npm run server
+services are deployed to linux server using nginx web server with following URL:
 
-will be running on port 5001
-
+http://18.188.192.149/dcxservice/tasks
 ## Available Scripts
 
 In the project directory, you can run:
-
 ### `npm start`
 
 Runs the app in the development mode.<br />
