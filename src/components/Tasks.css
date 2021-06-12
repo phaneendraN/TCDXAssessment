@@ -5,3 +5,9 @@
 .small, small {
     font-size: 50% !important;
 }
+
+@media screen and (max-width: 767px) {
+    .card-header .form-control {
+        margin-top: 1rem;
+    }
+}

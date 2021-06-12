@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Navbar';
-// import './Tasks.css';
+import './Tasks.css';
 import { Modal } from 'react-bootstrap'
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
@@ -14,7 +14,7 @@ const COLORS = ['#1890ff', '#808080'];
 
 const RADIAN = Math.PI / 180;
 
-let renderLabel = function(entry) {
+let renderLabel = function (entry) {
     return entry.name;
 }
 
@@ -241,11 +241,11 @@ export default function Tasks() {
                                 <ul className="">
                                     {tempTasks.sort((a, b) => {
                                         return a.id - b.id;
-                                    }).slice(0,3).map(listitem => (
-                                       listitem.status == 1 ? <li key={listitem.id}><s>{listitem.text}</s></li> :
-                                        <li key={listitem.id} className="">
-                                        {listitem.text}
-                                    </li>
+                                    }).slice(0, 3).map(listitem => (
+                                        listitem.status == 1 ? <li key={listitem.id}><s>{listitem.text}</s></li> :
+                                            <li key={listitem.id} className="">
+                                                {listitem.text}
+                                            </li>
                                     ))}
                                 </ul>
                             </div>
@@ -273,7 +273,7 @@ export default function Tasks() {
                                             />
                                         ))}
                                     </Pie>
-                                    <Tooltip/>
+                                    <Tooltip />
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
@@ -301,14 +301,17 @@ export default function Tasks() {
                             <div className="col-md-12 col-12 col-xl-12">
                                 <div className="card">
                                     <div className="card-header">
-                                        <h4>Tasks
-                                        <span className="float-right text-center mr-2">
-                                                <button onClick={handleShow} className="btn btn-primary" type="button">+New task</button>
-                                            </span>
-                                            <span className="float-right text-center mr-2">
-                                                <input type="text" onChange={(e) => onSearch(e.target.value)} className="form-control" onKeyUp={(e) => onSearch(e.target.value)} value={search} placeholder="search" />
-                                            </span>
-                                        </h4>
+                                        <div className="row">
+                                            <div className="col-md-8 col-xl-8 col-8">
+                                                <h4>Tasks</h4>
+                                            </div>
+                                            <div className="col-md-2  col-xl-2 col-4 float-right">
+                                                <button onClick={handleShow} style={{ display: 'inline-block' }} className="btn btn-primary mr-2" type="button">+New task</button>
+                                            </div>
+                                            <div className="col-md-2  col-xl-2 col-12 float-right  text-center">
+                                                <input type="text" onChange={(e) => onSearch(e.target.value)} style={{ display: 'inline-block' }} className="form-control" onKeyUp={(e) => onSearch(e.target.value)} value={search} placeholder="search" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="card-body">
                                         <div className="row">
